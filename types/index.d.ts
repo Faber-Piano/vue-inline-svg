@@ -7,23 +7,23 @@ https://github.com/DefinitelyTyped/DefinitelyTyped/blob/aa5c66c087896ff55568b76a
 
 import { VueConstructor, PluginFunction } from 'vue';
 
-interface InlineSvgProps {
+interface FpaInlineSvgProps {
     src: string;
     title?: string;
     transformSource?: (svg: SVGElement) => SVGElement;
     keepDuringLoading?: boolean;
 }
 
-interface InlineSvgPlugin {
+interface FpaInlineSvgPlugin {
     install: PluginFunction<never>
 }
 
-export declare const InlineSvgPlugin: InlineSvgPlugin;
+export declare const FpaInlineSvgPlugin: FpaInlineSvgPlugin;
 
-interface InlineSvgConstructor extends VueConstructor {
-    props: InlineSvgProps;
+interface FpaInlineSvgConstructor extends VueConstructor {
+    props: FpaInlineSvgProps;
 }
 
-export declare const InlineSvgComponent: InlineSvgConstructor;
+export declare const FpaInlineSvgComponent: FpaInlineSvgConstructor;
 
-export default InlineSvgComponent;
+export default FpaInlineSvgComponent;

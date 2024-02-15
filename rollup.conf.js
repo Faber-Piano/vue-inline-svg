@@ -11,8 +11,8 @@ export default [
         output: [
             {
                 format: 'umd',
-                file: 'dist/vue-inline-svg.js',
-                name: 'VueInlineSvg',
+                file: 'dist/fpa-vue-inline-svg.js',
+                name: 'FpaVueInlineSvg',
             },
             // {
             //     format: 'cjs',
@@ -20,8 +20,8 @@ export default [
             // },
             {
                 format: 'umd',
-                file: 'dist/vue-inline-svg.min.js',
-                name: 'VueInlineSvg',
+                file: 'dist/fpa-vue-inline-svg.min.js',
+                name: 'FpaVueInlineSvg',
                 globals: {vue: 'Vue'},
                 plugins: [
                     terser(),

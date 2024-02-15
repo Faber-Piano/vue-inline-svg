@@ -1,9 +1,9 @@
 import Vue from 'vue';
 
 // or as a component
-import InlineSvg from '../';
-import {InlineSvgComponent, InlineSvgPlugin} from '../';
+import FpaInlineSvg from '../';
+import {FpaInlineSvgComponent, FpaInlineSvgPlugin} from '../';
 // import InlineSvg = require('../')
-Vue.component('inline-svg', InlineSvg);
-Vue.component('inline-svg2', InlineSvgComponent);
-Vue.use(InlineSvgPlugin);
+Vue.component('fpa-inline-svg', FpaInlineSvg);
+Vue.component('fpa-inline-svg2', FpaInlineSvgComponent);
+Vue.use(FpaInlineSvgPlugin);

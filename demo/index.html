@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
-    <title>vue-inline-svg</title>
+    <title>fpa-vue-inline-svg</title>
 
     <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
     <script src="./index.js" type="module"></script>
@@ -12,9 +12,10 @@
 <div id="app">
     <div>
         <div>
-            <inline-svg
+            <!-- <inline-svg
                     id="svg1" width="150" height="150"
                     :src="`./img/${currentIcon}.svg`"
+                    :inline-src="svgs[currentInlineIcon]"
                     :fill="false"
                     :title="currentTitle"
                     @click="logClick"
@@ -24,6 +25,7 @@
             <inline-svg
                     id="svg2"
                     :src="`./img/${currentIcon}.svg`"
+                    :inline-src="svgs[currentInlineIcon]"
                     :width="currentSize"
                     :height="currentSize"
                     :transform-source="transform"
@@ -32,15 +34,36 @@
                     :keep-during-loading="false"
                     @loaded="logLoaded($event, 'svg2')"
                     @unloaded="logUnloaded('svg2')"
-            ></inline-svg>
-            <inline-svg id="svg3" src="./index.html" v-on:error="logError($event, 'svg3')"></inline-svg>
+            ></inline-svg> -->
+            <fpa-inline-svg
+                    id="svg1" width="150" height="150"
+                    :src="svgs[currentInlineIcon]"
+                    :fill="false"
+                    :title="currentTitle"
+                    @click="logClick"
+                    @loaded="logLoaded($event, 'svg1')"
+                    @unloaded="logUnloaded('svg1')"
+            ></fpa-inline-svg>
+            <fpa-inline-svg
+                    id="svg2"
+                    :src="svgs[currentInlineIcon]"
+                    :width="currentSize"
+                    :height="currentSize"
+                    :transform-source="transform"
+                    :fill="''"
+                    :title="currentTitle"
+                    :keep-during-loading="false"
+                    @loaded="logLoaded($event, 'svg2')"
+                    @unloaded="logUnloaded('svg2')"
+            ></fpa-inline-svg>
+            <fpa-inline-svg id="svg3" :src="['./index.html']" v-on:error="logError($event, 'svg3')"></fpa-inline-svg>
 
-            <inline-svg
+            <fpa-inline-svg
                 width="150" height="150"
-                src="./img/test-style.svg"
-            ></inline-svg>
+                :src="['./img/test-style.svg']"
+            ></fpa-inline-svg>
         </div>
-        <div>
+        <!-- <div>
             src:
             <label>
                 <input type="radio" name="icon" value="firefox" v-model="currentIcon">
@@ -48,6 +71,17 @@
             </label>
             <label>
                 <input type="radio" name="icon" value="safari" v-model="currentIcon">
+                Safari
+            </label>
+        </div> -->
+        <div>
+            inlineSrc:
+            <label>
+                <input type="radio" name="icon" value="inline-firefox" v-model="currentInlineIcon">
+                Firefox
+            </label>
+            <label>
+                <input type="radio" name="icon" value="inline-safari" v-model="currentInlineIcon">
                 Safari
             </label>
         </div>

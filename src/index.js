@@ -14,8 +14,8 @@ function filterAttrs(attrs) {
     }, {});
 }
 
-const InlineSvgComponent = {
-    name: 'InlineSvg',
+const FpaInlineSvgComponent = {
+    name: 'FpaInlineSvg',
     inheritAttrs: false,
     render(createElement) {
         if (!this.svgElSource) {
@@ -34,8 +34,11 @@ const InlineSvgComponent = {
     },
     props: {
         src: {
-            type: String,
+            type: Array,
             required: true,
+        },
+        inlineSrc: {
+            type: String,
         },
         title: {
             type: String,
@@ -58,12 +61,12 @@ const InlineSvgComponent = {
     watch: {
         src(newValue) {
             // re-generate cached svg (`svgElSource`)
-            this.getSource(newValue);
+            this.getSource(newValue[0], newValue[1]);
         },
     },
     mounted() {
         // generate `svgElSource`
-        this.getSource(this.src);
+        this.getSource(this.src[0], this.src[1]);
     },
     methods: {
         getSvgAttrs(svgEl) {
@@ -91,12 +94,24 @@ const InlineSvgComponent = {
         /**
          * Get svgElSource
          * @param {string} src
+         * @param {string} inlineSrc
          */
-        getSource(src) {
+        getSource(src, inlineSrc) {
             // fill cache by src with promise
             if (!cache[src]) {
-                // download
-                cache[src] = this.download(src);
+                // if inline is available, use that, cache by src name
+                if (inlineSrc) {
+                    let svgEl = this.parseSvg(inlineSrc);
+
+                    if (svgEl) {
+                        cache[src] = makePromiseState(Promise.resolve(svgEl));
+                    } else {
+                        cache[src] = makePromiseState(Promise.reject(new Error('Inlined file is not valid SVG')));
+                    }
+                } else {
+                    // download if no inline
+                    cache[src] = this.download(src);
+                }
             }
             // notify svg is unloaded
             if (this.svgElSource && cache[src].getIsPending() && !this.keepDuringLoading) {
@@ -139,12 +154,9 @@ const InlineSvgComponent = {
                 request.onload = () => {
                     if (request.status >= 200 && request.status < 400) {
                         try {
-                            // Setup a parser to convert the response to text/xml in order for it to be manipulated and changed
-                            const parser = new DOMParser();
-                            const result = parser.parseFromString(request.responseText, 'text/xml');
-                            let svgEl = result.getElementsByTagName('svg')[0];
+                            let svgEl = this.parseSvg(request.responseText);
+
                             if (svgEl) {
-                                // svgEl = this.transformSource(svgEl);
                                 resolve(svgEl);
                             } else {
                                 reject(new Error('Loaded file is not valid SVG"'));
@@ -160,6 +172,17 @@ const InlineSvgComponent = {
                 request.onerror = reject;
                 request.send();
             }));
+        },
+
+        /**
+         * Setup a parser to convert the response to text/xml in order for it to be manipulated and changed
+         *
+         * @param {string} svg
+         */
+        parseSvg(svg) {
+            const parser = new DOMParser();
+            const result = parser.parseFromString(svg, 'text/xml');
+            return result.getElementsByTagName('svg')[0];
         },
     },
 };
@@ -216,12 +239,12 @@ function makePromiseState(promise) {
     return result;
 }
 
-const InlineSvgPlugin = {
+const FpaInlineSvgPlugin = {
     install(Vue) {
-        Vue.component('inline-svg', InlineSvgComponent);
+        Vue.component('fpa-inline-svg', FpaInlineSvgComponent);
     },
 };
 
 // @TODO https://github.com/airbnb/javascript/pull/2721 need to be fixed
 // eslint-disable-next-line no-restricted-exports
-export { InlineSvgComponent as default, InlineSvgComponent, InlineSvgPlugin };
+export { FpaInlineSvgComponent as default, FpaInlineSvgComponent, FpaInlineSvgPlugin };

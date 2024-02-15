@@ -1,9 +1,9 @@
-import InlineSvg from '../src/index.js';
+import FpaInlineSvg from '../src/index.js';
 
 new Vue({
     el: '#app',
     components: {
-        InlineSvg,
+        FpaInlineSvg,
     },
     data() {
         return {
@@ -20,8 +20,9 @@ new Vue({
         let self = this;
         return createElement('div', [
             createElement('div', [
-                createElement(InlineSvg, {
+                createElement(FpaInlineSvg, {
                     attrs: {
+                        // TODO JW: FIX
                         src: `./img/${self.currentIcon}.svg`,
                         width: 150,
                         height: 150,
@@ -30,8 +31,9 @@ new Vue({
                         click: this.logClick,
                     },
                 }),
-                createElement(InlineSvg, {
+                createElement(FpaInlineSvg, {
                     attrs: {
+                        // TODO JW: FIX
                         src: `./img/${self.currentIcon}.svg`,
                         width: self.currentSize,
                         height: self.currentSize,

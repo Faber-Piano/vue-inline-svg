@@ -1,16 +1,8 @@
 # Vue Inline SVG
 
-[![NPM Package](https://img.shields.io/npm/v/vue-inline-svg.svg?style=flat-square)](https://www.npmjs.org/package/vue-inline-svg)
-[![Minified Size](https://img.shields.io/bundlephobia/min/vue-inline-svg.svg?style=flat-square)](https://bundlephobia.com/result?p=vue-inline-svg)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://github.com/shrpne/vue-inline-svg/blob/master/LICENSE)
-
 Vue component loads an SVG source dynamically and inline `<svg>` so you can manipulate the style of it with CSS or JS.
 It looks like basic `<img>` so you markup will not be bloated with SVG content.
 Loaded SVGs are cached so it will not make network request twice.
-
-[ci-img]:  https://travis-ci.org/shrpne/vue-inline-svg.svg
-[ci]:      https://travis-ci.org/shrpne/vue-inline-svg
-
 
 - [Install](#install)
   - [NPM](#npm)
@@ -38,17 +30,17 @@ Loaded SVGs are cached so it will not make network request twice.
 ### NPM
 
 ```bash
-npm install vue-inline-svg
+npm install git+ssh://git@github.com/Faber-Piano/vue-inline-svg.git#inline
 ```
 
 Register locally in your component
 ```js
-import InlineSvg from 'vue-inline-svg';
+import FpaInlineSvg from 'fpa-vue-inline-svg';
 
 // Your component
 export default {
     components: {
-        InlineSvg,
+        FpaInlineSvg,
     }
 }
 ```
@@ -58,77 +50,43 @@ Or register globally in the root Vue instance
 import Vue from 'vue';
 
 // as a plugin
-import {InlineSvgPlugin} from 'vue-inline-svg';
-Vue.use(InlineSvgPlugin);
+import {FpaInlineSvgPlugin} from 'fpa-vue-inline-svg';
+Vue.use(FpaInlineSvgPlugin);
 
 // or as a component
-import InlineSvg from 'vue-inline-svg';
-Vue.component('inline-svg', InlineSvg);
+import FpaInlineSvg from 'fpa-vue-inline-svg';
+Vue.component('fpa-inline-svg', FpaInlineSvg);
 ```
-
-
-### CDN
-
-```html
-<script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<!-- Include the `vue-inline-svg` script on your page after Vue script -->
-<script src="https://unpkg.com/vue-inline-svg"></script>
-
-<script>
-// Register as a plugin
-Vue.use(VueInlineSvg.InlineSvgPlugin);
-
-// or as a component
-Vue.component('inline-svg', VueInlineSvg.InlineSvgComponent);
-
-new Vue({
-// ...
-});
-</script>
-```
-
-### Vue v3
-
-Version of `vue-inline-svg` with support of Vue v3 is available under `next` tag
-from NPM
-```bash
-npm install vue-inline-svg@next
-```
-or from CDN
-```html
-<script src="https://unpkg.com/vue-inline-svg@next"></script>
-```
-
 
 ## Usage
 
 ```html
-<inline-svg 
-    src="image.svg" 
+<fpa-inline-svg
+    src="image.svg"
     transformSource="transformSvg"
     @loaded="svgLoaded($event)"
     @unloaded="svgUnloaded()"
     @error="svgLoadError($event)"
-    width="150" 
+    width="150"
     height="150"
     fill="black"
     aria-label="My image"
-></inline-svg>
-``` 
-[Example](https://github.com/shrpne/vue-inline-svg/blob/master/demo/index.html)
+></fpa-inline-svg>
+```
+[Example](https://github.com/Faber-Piano/fpa-vue-inline-svg/blob/inline/demo/index.html)
 
 
 ### props
 #### - `src`
-Path to SVG file
+SVG array, [Path to SVG file, inline SVG (optional)]
 
 ```html
-<inline-svg src="/my.svg"/>
+<fpa-inline-svg :src="['/my.svg', '<svg>test</svg>']">
 ```
 
 Note: if you use vue-loader assets or vue-cli, then paths like '../assets/my.svg' will not be handled by file-loader automatically like vue-cli do for `<img>` tag, so you will need to use it with `require`:
 ```html
-<inline-svg :src="require('../assets/my.svg')"/>
+<inline-svg :src="[require('../assets/my.svg')]"/>
 ```
 Learn more:
 - https://vue-loader.vuejs.org/guide/asset-url.html#transform-rules
@@ -139,7 +97,7 @@ Learn more:
 Sets/overwrites the `<title>` of the SVG
 
 ```html
-<inline-svg :src="image.svg" title="My Image"/>
+<inline-svg :src="['image.svg']" title="My Image"/>
 ```
 
 
@@ -147,15 +105,15 @@ Sets/overwrites the `<title>` of the SVG
 `true` by default. It makes vue-inline-svg to preserve old image visible, when new image is being loaded. Pass `false` to disable it and show nothing during loading.
 
 ```html
-<inline-svg :src="image.svg" :keepDuringLoading="false"/>
+<inline-svg :src="['image.svg']" :keepDuringLoading="false"/>
 ```
 
 #### - `transformSource`
 Function to transform SVG source
- 
+
 This example create circle in svg:
 ```html
-<inline-svg :src="image.svg" :transformSource="transform"/>
+<inline-svg :src="['image.svg']" :transformSource="transform"/>
 
 <script>
 const transform = (svg) => {
@@ -176,15 +134,15 @@ const transform = (svg) => {
 Other SVG and HTML attributes will be passed to inlined `<svg>`. Except attributes with `false` or `null` value.
 ```html
 <!-- input -->
-<inline-svg 
-    fill-opacity="0.25" 
+<fpa-inline-svg
+    fill-opacity="0.25"
     :stroke-opacity="myStrokeOpacity"
-    :color="false"        
-></inline-svg>
+    :color="false"
+></fpa-inline-svg>
 
 <!-- output -->
 <svg fill-opacity="0.25" stroke-opacity="0.5"></svg>
-``` 
+```
 
 
 ### events
@@ -207,21 +165,6 @@ Error object passed as argument into the listener’s callback function.
 ```html
 <inline-svg @error="log($event)"/>
 ```
-
-## Comparison
-
-- This module: [![Minified Size](https://img.shields.io/bundlephobia/min/vue-inline-svg.svg?style=flat-square)](https://bundlephobia.com/result?p=vue-inline-svg)
-- [vue-simple-svg](https://github.com/seiyable/vue-simple-svg): [![Minified Size](https://img.shields.io/bundlephobia/min/vue-simple-svg.svg?style=flat-square)](https://bundlephobia.com/result?p=vue-simple-svg), does not cache network requests, has wrapper around svg, attrs passed to `<svg>` are limited, converts `<style>` tag into `style=""` attr
-- [svg-loader](https://github.com/visualfanatic/vue-svg-loader) uses different approach, it inlines SVG during compilation. It has pros that SVG is prerendered and no http request needed. But also it has cons that markup size grows, especially if you have same image repeated several times. (Discussed in [#11](https://github.com/shrpne/vue-inline-svg/issues/11))
-
-
-## Changelog
-[CHANGELOG.md](https://github.com/shrpne/vue-inline-svg/blob/master/CHANGELOG.md)
-
-
-## Contributing
-[CONTRIBUTING.md](https://github.com/shrpne/vue-inline-svg/blob/master/CONTRIBUTING.md)
-
 
 ## License
 
