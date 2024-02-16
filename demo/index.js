@@ -196,8 +196,8 @@ new Vue({
         }
     },
     methods: {
-        logClick() {
-            console.log('click');
+        logClick(e) {
+            console.log('click', e.currentTarget);
         },
         logError(e, id) {
             console.log(id, 'Error loading index.html', e);
@@ -234,4 +234,6 @@ new Vue({
             return el;
         },
     },
-});
+};
+
+window.Vue.createApp(App).mount('#app');

@@ -45,7 +45,7 @@ export default {
 }
 ```
 
-Or register globally in the root Vue instance
+Or register globally in the Vue app
 ```js
 import Vue from 'vue';
 

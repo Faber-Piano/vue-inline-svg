@@ -1,3 +1,7 @@
+// peer dep is not installed during test
+// eslint-disable-next-line import/no-unresolved
+import { h as createElement } from 'vue';
+
 /** @type Record<string, PromiseWithState<Element>> */
 const cache = {};
 
@@ -14,31 +18,30 @@ function filterAttrs(attrs) {
     }, {});
 }
 
-const FpaInlineSvgComponent = {
+const FpaInlineSvg = {
     name: 'FpaInlineSvg',
     inheritAttrs: false,
-    render(createElement) {
+    render() {
         if (!this.svgElSource) {
             return null;
         }
         return createElement(
             'svg',
-            {
-                on: this.$listeners,
-                attrs: Object.assign(this.getSvgAttrs(this.svgElSource), filterAttrs(this.$attrs)),
-                domProps: {
-                    innerHTML: this.getSvgContent(this.svgElSource),
-                },
-            },
+            Object.assign(
+                {},
+                // source attrs
+                this.getSvgAttrs(this.svgElSource),
+                // component attrs and listeners
+                filterAttrs(this.$attrs),
+                // content
+                { innerHTML: this.getSvgContent(this.svgElSource) },
+            ),
         );
     },
     props: {
         src: {
             type: Array,
             required: true,
-        },
-        inlineSrc: {
-            type: String,
         },
         title: {
             type: String,
@@ -52,6 +55,7 @@ const FpaInlineSvgComponent = {
             default: true,
         },
     },
+    emits: ['loaded', 'unloaded', 'error'],
     data() {
         return {
             /** @type SVGElement */
@@ -239,12 +243,4 @@ function makePromiseState(promise) {
     return result;
 }
 
-const FpaInlineSvgPlugin = {
-    install(Vue) {
-        Vue.component('fpa-inline-svg', FpaInlineSvgComponent);
-    },
-};
-
-// @TODO https://github.com/airbnb/javascript/pull/2721 need to be fixed
-// eslint-disable-next-line no-restricted-exports
-export { FpaInlineSvgComponent as default, FpaInlineSvgComponent, FpaInlineSvgPlugin };
+export default FpaInlineSvg;

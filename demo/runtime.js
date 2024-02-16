@@ -16,7 +16,7 @@ new Vue({
             console.log('click');
         },
     },
-    render(createElement) {
+    render() {
         let self = this;
         return createElement('div', [
             createElement('div', [
@@ -59,19 +59,17 @@ new Vue({
         function makeRadio(name, value, dataName) {
             return createElement('label', [
                 createElement('input', {
-                    attrs: {
-                        type: 'radio',
-                        name,
-                        value,
-                    },
-                    on: {
-                        input: (event) => {
-                            self[dataName] = event.target.value;
-                        },
+                    type: 'radio',
+                    name,
+                    value,
+                    onInput: (event) => {
+                        self[dataName] = event.target.value;
                     },
                 }),
                 value.toString(),
             ]);
         }
     },
-});
+};
+
+window.Vue.createApp(App).mount('#app');
